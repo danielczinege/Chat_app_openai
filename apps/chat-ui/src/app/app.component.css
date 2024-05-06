@@ -1,5 +1,5 @@
 #chatArea {
-    width: 100%;
+    width: 70%;
     height: 300px;
     border: 1px solid #ccc;
     padding: 10px;
@@ -9,9 +9,9 @@
 #userInput {
     padding: 10px;
     border: 1px solid #ccc;
-    max-width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+    width: 500px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 #sendButton {
     cursor: pointer;
