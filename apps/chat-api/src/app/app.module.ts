@@ -3,9 +3,10 @@ import { exampleFunction } from '@ukol-01/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatModule } from './chat/chat.module';
+import { OpenaiModule } from './openai/openai.module';
 
 @Module({
-  imports: [ChatModule],
+  imports: [ChatModule, OpenaiModule],
   controllers: [AppController],
   providers: [AppService],
 })
