@@ -1,18 +1,33 @@
+#title {
+    text-align: center;
+}
+
 #chatArea {
-    width: 70%;
-    height: 300px;
+    width: 90%;
+    height: 600px;
     border: 1px solid #ccc;
     padding: 10px;
     overflow-y: scroll;
-    margin-bottom: 10px;
+    margin: 0 auto;
 }
+
+#inputArea {
+    text-align: center;
+    padding: 20px;
+}
+
 #userInput {
     padding: 10px;
     border: 1px solid #ccc;
-    width: 500px;
+    width: 700px;
     margin-left: 5px;
     margin-right: 5px;
 }
 #sendButton {
     cursor: pointer;
+}
+body {
+    width: 50%;
+    margin: 0 auto;
+    border: 5px solid black;
 }
