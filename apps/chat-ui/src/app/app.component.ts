@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { exampleFunction } from '@ukol-01/common';
+import { NavigationComponent } from '../components/navigation/navigation.component';
 
 @Component({
   standalone: true,
-  imports: [RouterModule, RouterOutlet],
+  imports: [RouterModule, RouterOutlet, NavigationComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
