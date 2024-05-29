@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { exampleFunction } from '@ukol-01/common';
 import { NavigationComponent } from '../components/navigation/navigation.component';
+import { ChatService } from './chat.service';
 
 @Component({
   standalone: true,

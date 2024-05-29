@@ -1,1 +1,19 @@
-<p>chat works!</p>
+<div class="border-2 border-black flex flex-col h-full">
+    <div class="flex-grow overflow-y-auto">
+        <p>chat area</p>
+    </div>
+    <form [formGroup]="messageForm"
+          (ngSubmit)="handleSubmit()"type="text" formControlName="message"
+          class="flex items-center p-2">
+        <textarea class="rounded-2xl mr-1 w-2/5"></textarea>
+        <button type="submit"
+                class="border-2
+                     border-gray-800
+                     text-white 
+                       rounded-2xl 
+                       min-h-9 
+                       min-w-16
+                       bg-gray-500
+                       hover:text-primary-light">Ask</button>
+    </form>
+</div>

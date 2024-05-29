@@ -1,6 +1,8 @@
-<body class="min-h-screen bg-gradient-to-b to-purple-400 from-purple-200">
+<div class="min-h-screen bg-gradient-to-b to-purple-400 from-purple-200 flex flex-col items-center">
     <h1 class="text-center p-2 text-2xl">My chat</h1>
 
-    <app-navigation></app-navigation>
-    <router-outlet></router-outlet>
-</body>
+    <app-navigation class="w-full"></app-navigation>
+    <div class="border-black border-2 m-1 w-3/4 flex-grow">
+        <router-outlet></router-outlet>
+    </div>
+</div>
