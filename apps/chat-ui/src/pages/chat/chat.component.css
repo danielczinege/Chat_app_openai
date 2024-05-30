@@ -1,0 +1,7 @@
+:host{
+    @apply flex flex-1 flex-col justify-start items-center;
+    textarea{
+        field-sizing: content;
+        resize: none;
+    }
+}
