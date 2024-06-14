@@ -14,6 +14,8 @@ module.exports = {
           DEFAULT: '#803e92',
           light: '#d2c3d6',
         },
+        'user': '#6b7280',
+        'ai':   '#474747'
       },
     },
   },
