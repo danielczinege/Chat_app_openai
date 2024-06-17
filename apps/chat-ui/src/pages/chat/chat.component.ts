@@ -1,8 +1,11 @@
+import { IResponse } from './../../../../../libs/common/src/lib/common';
+import { ChatService } from './../../app/chat.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Message } from '@ukol-01/common';
 import { MessageComponent } from '../../components/message/message.component';
+import { Observable, Subscription, catchError, of } from 'rxjs';
 
 @Component({
     selector: 'app-chat',
@@ -15,18 +18,43 @@ export class ChatComponent {
     messageForm = new FormGroup({
         message: new FormControl('', {nonNullable: true}),
     });
-
     messages: Message[] = [];
+    processing_response = false;
+    private subscription: Subscription | null = null;
 
-    handleSubmit() {
+    constructor(private chatService: ChatService) {}
+
+    async handleSubmit() {
         let current_message = this.messageForm.value.message;
 
         if (! current_message || current_message == undefined) {
             return;
         }
 
-        this.messages.push({who: "user", content: current_message});
+        this.processing_response = true;
         this.messageForm.reset();
-        this.messages.push({who: "AI", content: "Hmm... That is interesting. Here is some random large text: dddd ddddddddddd dddddddddd dddddddddd dddddd ddddddd ddddddd dddddddd ddddddddd dddddddddddddd dddddddddddddddd dddddddddd ddddddddddddddd dddddddddd dddddddddd dddddddd dddddddddddd ddddddddddddddddd ddddddddddddddd ddddddddddddddd dddddddddddddddddddddd"})
+
+        this.messages.push({who: "user", content: current_message});
+
+        this.subscription = this.chatService.getResponse({text: current_message}).pipe(catchError((error: any, caught: Observable<any>): Observable<any> => {
+            this.messages.push({who: "AI", content: "error occured"});
+            this.processing_response = false;
+            return of();
+        }))
+        .subscribe({next: (response: IResponse) => {
+            this.messages.push({who: "AI", content: response.message});
+            this.processing_response = false;
+        }, complete: () => {
+            if (this.subscription) {
+                this.subscription.unsubscribe();
+                this.subscription = null;
+            }
+        }});
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

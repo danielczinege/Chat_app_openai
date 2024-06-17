@@ -10,6 +10,7 @@
       class="flex flex-row items-center justify-center p-2 w-full">
     <textarea type="text" formControlName="message" class="p-2 rounded-2xl mr-1 w-2/5 min-h-10 max-h-36"></textarea>
     <button type="submit"
+            [disabled]="processing_response"
             class="border-2
                  border-gray-800
                  text-white 
