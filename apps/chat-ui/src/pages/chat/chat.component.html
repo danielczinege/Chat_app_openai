@@ -1,8 +1,10 @@
 <div class="overflow-y-auto flex-1 w-full flex flex-col p-1 border-2 border-primary rounded-lg">
-  @for (message of messages; track message.content) {
-    <app-message class="flex flex-col my-0.5"
-                 [who]="message.who"
-                 [content]="message.content"></app-message>
+  @if (messages$ | async; as messages) {
+    @for (message of messages; track message.content) {
+      <app-message class="flex flex-col my-0.5"
+                   [who]="message.who"
+                   [content]="message.content"></app-message>
+    }
   }
 </div>
 <form [formGroup]="messageForm"

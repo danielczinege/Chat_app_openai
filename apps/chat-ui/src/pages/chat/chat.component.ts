@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Message } from '@ukol-01/common';
 import { MessageComponent } from '../../components/message/message.component';
-import { Observable, Subscription, catchError, of } from 'rxjs';
+import { Observable, Subject, Subscription, catchError, map, of, scan, switchMap, tap } from 'rxjs';
 
 @Component({
     selector: 'app-chat',
@@ -18,13 +18,28 @@ export class ChatComponent {
     messageForm = new FormGroup({
         message: new FormControl('', {nonNullable: true}),
     });
-    messages: Message[] = [];
     processing_response = false;
-    private subscription: Subscription | null = null;
+    message = new Subject<string>();
+    messages$: Observable<Message[]> = this.message.asObservable().pipe(
+        switchMap((current_message: string) => {
+            return this.chatService.getResponse({text: current_message}).pipe(
+                map((response) => {
+                    return [{who: 'user', content: current_message},
+                            {who: 'AI', content: response.message}] as Message[]
+                }),
+                catchError((error: any, caught: Observable<any>) => {
+                return of([{who: 'user', content: current_message},
+                           {who: 'AI', content: "error occured"}] as Message[]);
+            }));
+        }), scan((acumulator, messages, index) => [...acumulator, ...messages], [] as Message[]),
+         tap(() => {
+            this.processing_response = false;
+        })
+    );
 
     constructor(private chatService: ChatService) {}
 
-    async handleSubmit() {
+    handleSubmit() {
         let current_message = this.messageForm.value.message;
 
         if (! current_message || current_message == undefined) {
@@ -33,28 +48,6 @@ export class ChatComponent {
 
         this.processing_response = true;
         this.messageForm.reset();
-
-        this.messages.push({who: "user", content: current_message});
-
-        this.subscription = this.chatService.getResponse({text: current_message}).pipe(catchError((error: any, caught: Observable<any>): Observable<any> => {
-            this.messages.push({who: "AI", content: "error occured"});
-            this.processing_response = false;
-            return of();
-        }))
-        .subscribe({next: (response: IResponse) => {
-            this.messages.push({who: "AI", content: response.message});
-            this.processing_response = false;
-        }, complete: () => {
-            if (this.subscription) {
-                this.subscription.unsubscribe();
-                this.subscription = null;
-            }
-        }});
-    }
-
-    ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
+        this.message.next(current_message);
     }
 }
