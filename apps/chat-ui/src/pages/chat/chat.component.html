@@ -6,6 +6,9 @@
                    [content]="message.content"></app-message>
     }
   }
+  @if (processing_response) {
+    <p>Waiting for response...</p>
+  }
 </div>
 <form [formGroup]="messageForm"
       (ngSubmit)="handleSubmit()"
