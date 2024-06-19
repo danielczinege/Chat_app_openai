@@ -1,5 +1,5 @@
 import { ChatService } from './../../app/chat.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { MessageComponent } from '../../components/message/message.component';
@@ -11,7 +11,7 @@ import { MessageComponent } from '../../components/message/message.component';
     templateUrl: './chat.component.html',
     styleUrl: './chat.component.css',
 })
-export class ChatComponent implements OnDestroy {
+export class ChatComponent {
     messageForm = new FormGroup({
         message: new FormControl('', {nonNullable: true}),
     });
@@ -28,9 +28,5 @@ export class ChatComponent implements OnDestroy {
         this.chatService.processing_response = true;
         this.messageForm.reset();
         this.chatService.message.next(current_message);
-    }
-
-    ngOnDestroy(): void {
-        this.chatService.processing_response = false;
     }
 }
