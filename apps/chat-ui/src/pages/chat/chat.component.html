@@ -1,12 +1,12 @@
 <div class="overflow-y-auto flex-1 w-full flex flex-col p-1 border-2 border-primary rounded-lg">
-  @if (messages$ | async; as messages) {
+  @if (chatService.messages$ | async; as messages) {
     @for (message of messages; track message.content) {
       <app-message class="flex flex-col my-0.5"
                    [who]="message.who"
                    [content]="message.content"></app-message>
     }
   }
-  @if (processing_response) {
+  @if (chatService.processing_response) {
     <p>Waiting for response...</p>
   }
 </div>
@@ -15,7 +15,7 @@
       class="flex flex-row items-center justify-center p-2 w-full">
     <textarea type="text" formControlName="message" class="p-2 rounded-2xl mr-1 w-2/5 min-h-10 max-h-36"></textarea>
     <button type="submit"
-            [disabled]="processing_response"
+            [disabled]="chatService.processing_response"
             class="border-2
                  border-gray-800
                  text-white 
