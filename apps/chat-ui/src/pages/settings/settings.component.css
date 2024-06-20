@@ -5,6 +5,9 @@
         resize: none;
     }
     button{
-        @apply border-2 border-gray-800 text-white rounded-2xl h-9 w-fit px-1 mb-1 bg-gray-500 hover:text-primary-light;
+        @apply border-2 border-gray-800 text-white rounded-xl h-9 w-fit px-1 bg-gray-500 hover:text-primary-light;
+    }
+    #values {
+        width: 17ch;
     }
 }
