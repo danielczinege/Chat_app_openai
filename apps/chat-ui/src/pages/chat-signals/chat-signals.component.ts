@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { ChatSignalsService } from '../../app/chat-signals.service';
@@ -32,9 +32,11 @@ export class ChatSignalsComponent {
         this.messageForm.reset();
         this.chatService.messages.update((msgs) => [...msgs, {who: 'user', content: current_message}]);
 
-        const ai_response = await firstValueFrom<Message>(this.chatService.getResponse({text: current_message}).pipe(
-            map((response) => ({who: 'AI', content: response.message} as Message)),
-            catchError((error: any, caught: Observable<any>) => of({who: 'AI', content: "error occurred"} as Message))
+        const ai_response = await firstValueFrom<Message>(this.chatService.getResponse({messages: this.chatService.messages(),
+                                                                                        temperature: 1,
+                                                                                        max_tokens: 256}).pipe(
+            map((response) => ({who: 'assistant', content: response.message} as Message)),
+            catchError((error: any, caught: Observable<any>) => of({who: 'assistant', content: "error occurred"} as Message))
         ));
 
         this.chatService.processing_response = false;

@@ -8,16 +8,18 @@ export class ChatController {
 
     @Post()
     async messageReceiver(@Body() body: MessageRequest) {
-        console.log('received message', body.text);
+        console.log('received message: ', body.messages[body.messages.length]);
 
-        const answer = await this.chatService.getAnswer(body.text).catch((e) => {
+        const answer = await this.chatService.getAnswer(body.messages,
+                                                        body.temperature,
+                                                        body.max_tokens).catch((e) => {
             console.error('Error while fetching the completion:', e);
             throw new InternalError(
                 'There was an error processing your request. Please try again later.'
             );
         });
 
-        console.log('got answer', answer.choices[0].message.content);
+        console.log('got answer: ', answer.choices[0].message.content);
         return {
             message: answer.choices[0].message.content,
         } as IResponse;

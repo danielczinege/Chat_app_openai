@@ -17,6 +17,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('../pages/chat-signals/chat-signals.component').then(m => m.ChatSignalsComponent),
     },
     {
+        path: 'settings',
+        title: 'settings',
+        loadComponent: () => import('../pages/settings/settings.component').then(m => m.SettingsComponent),
+    },
+    {
         path: '',
         redirectTo: '/home',
         pathMatch: 'full' 

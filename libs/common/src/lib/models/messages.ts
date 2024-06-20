@@ -1,8 +1,10 @@
 export interface MessageRequest {
-    text: string;
+    messages: Message[];
+    temperature: number;
+    max_tokens: number;
 }
 
 export interface Message {
-    who: 'user' | 'AI';
+    who: 'user' | 'assistant' | 'system';
     content: string;
 }

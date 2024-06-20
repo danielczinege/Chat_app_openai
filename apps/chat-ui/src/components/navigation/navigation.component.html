@@ -1,5 +1,5 @@
-<nav class="bg-primary px-4 py-2 shadow-lg w-3/4 mx-auto rounded-lg border-2 border-black">
-  <ul class="flex space-x-4">
+<nav class="bg-primary px-4 py-2 shadow-lg w-3/4 mx-auto rounded-lg border-2 border-black flex">
+  <ul class="flex space-x-4 self-start">
     <li>
       <a routerLink="/home"
          class="text-white hover:text-primary-light hover:underline hover:underline-offset-4"
@@ -22,4 +22,9 @@
       </a>
     </li>
   </ul>
+  <a routerLink="/chatWithSignals"
+     class="text-white hover:text-primary-light hover:underline hover:underline-offset-4 self-end"
+     routerLinkActive="underline">
+    Settings
+  </a>
 </nav>

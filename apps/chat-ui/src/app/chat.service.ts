@@ -11,14 +11,17 @@ export class ChatService {
     message = new Subject<string>();
     messages$: Observable<Message[]> = this.message.asObservable().pipe(
         switchMap((current_message: string) => {
-            return this.getResponse({text: current_message}).pipe(
+            return this.getResponse({messages: [{who: 'user', content: current_message} as Message],
+                                     temperature: 1,
+                                     max_tokens: 256}
+            ).pipe(
                 map((response) => {
                     this.processing_response = false;
-                    return ({who: 'AI', content: response.message} as Message)
+                    return ({who: 'assistant', content: response.message} as Message)
                 }),
                 catchError((error: any, caught: Observable<any>) => {
                     this.processing_response = false;
-                    return of({who: 'AI', content: "error occurred"} as Message)
+                    return of({who: 'assistant', content: "error occurred"} as Message)
                 }),
                 startWith({who: 'user', content: current_message} as Message));
         }),

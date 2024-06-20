@@ -9,6 +9,6 @@ import { CommonModule } from '@angular/common';
     styleUrl: './message-signals.component.css',
 })
 export class MessageSignalsComponent {
-    @Input() who!: 'user' | 'AI';
+    @Input() who!: 'user' | 'assistant' | 'system';
     @Input() content!: string;
 }

@@ -11,11 +11,15 @@ export class OpenaiService {
 
     createCompletion(
         messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+        temperature: number = 1,
+        max_tokens: number = 256,
         model: OpenAI.Chat.ChatModel = 'gpt-3.5-turbo-0125',
     ) {
         return this.openaiClient.chat.completions.create({
-            messages,
-            model,
+            messages: messages,
+            model: model,
+            temperature: temperature,
+            max_tokens: max_tokens
           });
     }
 }
