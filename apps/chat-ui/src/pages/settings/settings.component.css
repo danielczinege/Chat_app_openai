@@ -1,5 +1,9 @@
 :host{
     @apply flex flex-1 flex-col justify-start items-center;
+    textarea{
+        field-sizing: content;
+        resize: none;
+    }
     button{
         @apply border-2 border-gray-800 text-white rounded-2xl h-9 w-fit px-1 mb-1 bg-gray-500 hover:text-primary-light;
     }

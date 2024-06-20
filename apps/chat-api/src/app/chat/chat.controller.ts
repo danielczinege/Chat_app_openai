@@ -8,7 +8,7 @@ export class ChatController {
 
     @Post()
     async messageReceiver(@Body() body: MessageRequest) {
-        console.log('received message: ', body.messages[body.messages.length]);
+        console.log('received message: ', body.messages[body.messages.length - 1]);
 
         const answer = await this.chatService.getAnswer(body.messages,
                                                         body.temperature,

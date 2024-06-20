@@ -8,15 +8,34 @@
       </div>
   
       <div class="w-2/3 flex flex-row justify-center items-center">
-        <input type="number" formControlName="temperature" class="p-2 rounded-2xl m-1 w-1/2 min-h-10 max-h-36"/>
+        @if (messageForm.controls.temperature.valid) {
+          <input type="number" formControlName="temperature" class="p-2 rounded-2xl m-1 w-1/2 min-h-10 max-h-36"/>
+        } @else {
+          <input type="number" formControlName="temperature" class="p-2 rounded-2xl m-1 w-1/2 min-h-10 max-h-36 border-2 border-red-600"/>
+        }
         <button type="submit"
                 (click)="applyTemperature()">Set temperature</button>
       </div>
-  
+
+      @if (messageForm.controls.temperature.invalid) {
+        <div>
+          <small>Temperature must be between 0 and 2.</small>
+        </div>
+      }
+
       <div class="w-2/3 flex flex-row justify-center items-center">
-        <input type="number" formControlName="max_tokens" class="p-2 rounded-2xl m-1 w-1/2 min-h-10 max-h-36"/>
+        @if (messageForm.controls.max_tokens.valid) {
+          <input type="number" formControlName="max_tokens" class="p-2 rounded-2xl m-1 w-1/2 min-h-10 max-h-36"/>
+        } @else {
+          <input type="number" formControlName="max_tokens" class="p-2 rounded-2xl m-1 w-1/2 min-h-10 max-h-36 border-2 border-red-600"/>
+        }
         <button type="submit"
                 (click)="applyMaxTokens()">Set max tokens</button>
       </div>
+      @if (messageForm.controls.max_tokens.invalid) {
+        <div>
+          <small>Max tokens must be an integer between 1 and 4095.</small>
+        </div>
+      }
     </form>
   </div>

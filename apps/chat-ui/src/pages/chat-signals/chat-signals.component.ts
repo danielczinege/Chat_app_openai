@@ -5,6 +5,7 @@ import { ChatSignalsService } from '../../app/chat-signals.service';
 import { MessageSignalsComponent } from '../../components/message-signals/message-signals.component';
 import { Message } from '@ukol-01/common';
 import { Observable, catchError, firstValueFrom, map, of } from 'rxjs';
+import { SettingsService } from '../../app/settings.service';
 
 @Component({
     selector: 'app-chat-signals',
@@ -19,7 +20,8 @@ export class ChatSignalsComponent {
         message: new FormControl('', {nonNullable: true}),
     });
 
-    constructor(public chatService: ChatSignalsService) {}
+    constructor(public chatService: ChatSignalsService,
+                private settings: SettingsService) {}
 
     async handleSubmit() {
         let current_message = this.messageForm.value.message;
@@ -33,8 +35,8 @@ export class ChatSignalsComponent {
         this.chatService.messages.update((msgs) => [...msgs, {who: 'user', content: current_message}]);
 
         const ai_response = await firstValueFrom<Message>(this.chatService.getResponse({messages: this.chatService.messages(),
-                                                                                        temperature: 1,
-                                                                                        max_tokens: 256}).pipe(
+                                                                                        temperature: this.settings.temperature,
+                                                                                        max_tokens: this.settings.max_tokens}).pipe(
             map((response) => ({who: 'assistant', content: response.message} as Message)),
             catchError((error: any, caught: Observable<any>) => of({who: 'assistant', content: "error occurred"} as Message))
         ));

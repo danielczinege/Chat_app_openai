@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { IResponse, Message, MessageRequest } from '@ukol-01/common';
 
 @Injectable({

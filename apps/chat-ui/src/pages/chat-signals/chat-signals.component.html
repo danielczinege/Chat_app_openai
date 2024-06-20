@@ -1,8 +1,10 @@
 <div class="overflow-y-auto flex-1 w-full flex flex-col p-1 border-2 border-primary rounded-lg">
     @for (message of chatService.messages(); track message.content) {
-      <app-message-signals class="flex flex-col my-0.5"
-                   [who]="message.who"
-                   [content]="message.content"></app-message-signals>
+      @if (message.who != 'system') {
+        <app-message-signals class="flex flex-col my-0.5"
+                             [who]="message.who"
+                             [content]="message.content"></app-message-signals>
+      }
     }
     @if (chatService.processing_response) {
       <p>Waiting for response...</p>
