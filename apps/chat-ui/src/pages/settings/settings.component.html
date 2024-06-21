@@ -1,14 +1,14 @@
 <div class="overflow-y-auto flex-1 w-full flex flex-col p-1 border-2 border-primary rounded-lg">
     <form [formGroup]="messageForm"
           class="flex flex-col items-center p-2 w-full">
-          <div class="flex flex-row justify-between w-2/3 border-2">
-            <div id="values" class="flex flex-col border-2 w-1/4">
+          <div class="flex flex-row justify-between w-2/3">
+            <div id="values" class="flex flex-col w-1/4">
               <div class="m-2">Temperature: {{messageForm.value.temperature}}</div>
               <div class="m-2">Max tokens: {{messageForm.value.max_tokens}}</div>
             </div>
 
             <div class="flex flex-col items-start flex-1 justify-start">
-              <div class="flex flex-row w-full justify-between items-center border-2 border-black">
+              <div class="flex flex-row w-full justify-between items-center">
                 <input type="range"
                        min="0"
                        max="2"
@@ -32,7 +32,7 @@
             </div>
           </div>
 
-      <div class="w-2/3 flex flex-col justify-center items-center">
+      <div class="w-2/3 flex flex-col justify-center items-center mt-6">
         <textarea type="text" formControlName="system" class="p-2 rounded-2xl m-1 w-full min-h-10 max-h-36"></textarea>
         <button type="submit"
                 (click)="applyCustomInstructions()">Set custom instructions</button>
