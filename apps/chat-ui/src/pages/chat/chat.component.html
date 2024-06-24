@@ -2,7 +2,7 @@
   @if (chatService.messages$ | async; as messages) {
     @for (message of messages; track message.content) {
       <app-message class="flex flex-col my-0.5"
-                   [who]="message.who"
+                   [sender]="message.sender"
                    [content]="message.content"></app-message>
     }
   }

@@ -29,7 +29,7 @@ export class SettingsComponent {
             return;
         }
 
-        this.chatService.messages.update((msgs) => [{who: 'system', content: current_message}]);
+        this.chatService.messages.update((msgs) => [{sender: 'system', content: current_message}]);
         this.settings.custom_instructions = current_message;
     }
 

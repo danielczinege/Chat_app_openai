@@ -32,13 +32,13 @@ export class ChatSignalsComponent {
 
         this.chatService.processing_response = true;
         this.messageForm.reset();
-        this.chatService.messages.update((msgs) => [...msgs, {who: 'user', content: current_message}]);
+        this.chatService.messages.update((msgs) => [...msgs, {sender: 'user', content: current_message}]);
 
         const ai_response = await firstValueFrom<Message>(this.chatService.getResponse({messages: this.chatService.messages(),
                                                                                         temperature: this.settings.temperature,
                                                                                         max_tokens: this.settings.max_tokens}).pipe(
-            map((response) => ({who: 'assistant', content: response.message} as Message)),
-            catchError((error: any, caught: Observable<any>) => of({who: 'assistant', content: "error occurred"} as Message))
+            map((response) => ({sender: 'assistant', content: response.message} as Message)),
+            catchError((error: any, caught: Observable<any>) => of({sender: 'assistant', content: "error occurred"} as Message))
         ));
 
         this.chatService.processing_response = false;

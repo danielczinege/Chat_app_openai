@@ -1,13 +1,11 @@
-export function exampleFunction(): IResponse {
-    return {
-        message: 'Hello, world!',
-    };
-}
-
 export interface IResponse {
     message: string;
 }
 
+export interface Conversation {
+    id: number;
+    title: string;
+}
 
 export class InternalError extends Error {
     constructor(m: string) {

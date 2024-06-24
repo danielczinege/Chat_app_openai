@@ -5,6 +5,6 @@ export interface MessageRequest {
 }
 
 export interface Message {
-    who: 'user' | 'assistant' | 'system';
+    sender: 'user' | 'assistant' | 'system';
     content: string;
 }
