@@ -5,7 +5,7 @@ import OpenAI from 'openai';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 import { eq } from 'drizzle-orm';
-import { conversationMessages, messages } from '../../db/schema';
+import { conversationMessages, messages, conversations } from '../../db/schema';
 
 
 @Injectable()
@@ -44,5 +44,22 @@ export class ChatService {
             .innerJoin(conversationMessages, eq(messages.id, conversationMessages.messageId))
             .where(eq(conversationMessages.conversationId, id))
             .orderBy(messages.id);
+    }
+
+    public insertConversation(title: string) {
+        return this.database.insert(conversations).values({title: title}).returning();
+    }
+
+    public async insertMessage(conversationID: number, message: Message) {
+        return this.database.transaction(async (tx) => {
+            const insertedMessageID = await tx
+                .insert(messages)
+                .values({sender: message.sender, content: message.content})
+                .returning({id: messages.id});
+
+            await tx.insert(conversationMessages)
+                    .values({conversationId: conversationID,
+                         messageId: insertedMessageID[0].id});
+        });
     }
 }

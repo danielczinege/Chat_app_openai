@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { Conversation, IResponse, InternalError, Message, MessageRequest } from '@ukol-01/common';
+import { Conversation, ConversationInsertRequest, IResponse, InternalError, Message, MessageRequest } from '@ukol-01/common';
 
 @Controller('chat')
 export class ChatController {
@@ -9,6 +9,10 @@ export class ChatController {
     @Post()
     async messageReceiver(@Body() body: MessageRequest) {
         console.log('received message: ', body.messages[body.messages.length - 1].content);
+
+        await this.chatService.insertMessage(body.conversationID, body.messages[body.messages.length - 1]).catch((e) => {
+            console.error('Error while inserting message to database: ', e);
+        });
 
         const answer = await this.chatService.getAnswer(body.messages,
                                                         body.temperature,
@@ -19,9 +23,18 @@ export class ChatController {
             );
         });
 
-        console.log('got answer: ', answer.choices[0].message.content);
+        const response = answer.choices[0].message.content;
+
+        await this.chatService.insertMessage(body.conversationID, {
+            sender: 'assistant',
+            content: response,
+        }).catch((e) => {
+            console.error('Error while inserting response to database: ', e);
+        });
+
+        console.log('got answer: ', response);
         return {
-            message: answer.choices[0].message.content,
+            message: response,
         } as IResponse;
     }
 
@@ -47,5 +60,12 @@ export class ChatController {
         });
 
         return conversations as Conversation[];
+    }
+
+    @Post('conversation')
+    async insertConversation(@Body() conversation: ConversationInsertRequest) {
+        const inserted = await this.chatService.insertConversation(conversation.title);
+
+        return inserted[0].id;
     }
 }
