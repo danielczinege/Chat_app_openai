@@ -18,7 +18,7 @@ export class SettingsComponent {
         system: new FormControl(this.settings.custom_instructions, {nonNullable: true}),
     });
 
-    constructor(private settings: SettingsService,
+    constructor(public settings: SettingsService,
                 private chatService: ChatSignalsService) {}
 
     applyCustomInstructions() {

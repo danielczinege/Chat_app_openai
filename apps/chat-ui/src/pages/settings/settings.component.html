@@ -1,10 +1,11 @@
 <div class="overflow-y-auto flex-1 w-full flex flex-col p-1 border-2 border-primary rounded-lg">
     <form [formGroup]="messageForm"
           class="flex flex-col items-center p-2 w-full">
+          <p>These are the settings for you currently active chat.</p>
           <div class="flex flex-row justify-between w-2/3">
             <div id="values" class="flex flex-col w-1/4">
-              <div class="m-2">Temperature: {{messageForm.value.temperature}}</div>
-              <div class="m-2">Max tokens: {{messageForm.value.max_tokens}}</div>
+              <div class="my-2">Temperature: {{messageForm.value.temperature}}</div>
+              <div class="my-2">Max tokens: {{messageForm.value.max_tokens}}</div>
             </div>
 
             <div class="flex flex-col items-start flex-1 justify-start">
@@ -32,10 +33,12 @@
             </div>
           </div>
 
-          <div class="w-2/3 flex flex-col justify-center items-center mt-6">
-            <textarea type="text" formControlName="system" class="p-2 rounded-2xl m-1 w-full min-h-10 max-h-36"></textarea>
-            <button type="submit"
-                    (click)="applyCustomInstructions()">Set custom instructions</button>
+          <div class="mt-6 w-2/3">
+            <p>Custom instructions: @if(!settings.custom_instructions) {(none)}</p>
+            <div class="border-2 border-primary rounded-lg p-1 min-h-8"
+                 title="Custom instructions can be changed only when creating new conversations.">
+              <p>{{settings.custom_instructions}}</p>
+            </div>
           </div>
     </form>
   </div>

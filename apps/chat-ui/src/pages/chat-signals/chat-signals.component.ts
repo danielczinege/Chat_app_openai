@@ -6,11 +6,12 @@ import { MessageSignalsComponent } from '../../components/message-signals/messag
 import { Message } from '@ukol-01/common';
 import { Observable, catchError, firstValueFrom, map, of } from 'rxjs';
 import { SettingsService } from '../../app/settings.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-chat-signals',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MessageSignalsComponent],
+    imports: [CommonModule, ReactiveFormsModule, MessageSignalsComponent, RouterModule],
     templateUrl: './chat-signals.component.html',
     styleUrl: './chat-signals.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,7 +37,8 @@ export class ChatSignalsComponent {
 
         const ai_response = await firstValueFrom<Message>(this.chatService.getResponse({messages: this.chatService.messages(),
                                                                                         temperature: this.settings.temperature,
-                                                                                        max_tokens: this.settings.max_tokens}).pipe(
+                                                                                        max_tokens: this.settings.max_tokens,
+                                                                                        conversationID: this.chatService.conversationID as number}).pipe(
             map((response) => ({sender: 'assistant', content: response.message} as Message)),
             catchError((error: any, caught: Observable<any>) => of({sender: 'assistant', content: "error occurred"} as Message))
         ));

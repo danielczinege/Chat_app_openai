@@ -9,12 +9,14 @@ import { SettingsService } from './settings.service';
 })
 export class ChatService {
     processing_response = false;
+    conversationID = 2;
     message = new Subject<string>();
     messages$: Observable<Message[]> = this.message.asObservable().pipe(
         switchMap((current_message: string) => {
             return this.getResponse({messages: [{sender: 'user', content: current_message} as Message],
                                      temperature: this.settings.temperature,
-                                     max_tokens: this.settings.max_tokens}
+                                     max_tokens: this.settings.max_tokens,
+                                     conversationID: this.conversationID},
             ).pipe(
                 map((response) => {
                     this.processing_response = false;
