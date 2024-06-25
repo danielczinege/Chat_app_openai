@@ -69,7 +69,7 @@ export class ChatController {
 
     @Post('conversation')
     async insertConversation(@Body() conversation: ConversationInsertRequest) {
-        const inserted = await this.chatService.insertConversation(conversation.title);
+        const inserted = await this.chatService.insertConversation(conversation);
 
         return inserted[0].id;
     }

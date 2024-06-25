@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { OpenaiService } from '../openai/openai.service';
-import { Message } from '@ukol-01/common';
+import { ConversationInsertRequest, Message } from '@ukol-01/common';
 import OpenAI from 'openai';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
@@ -46,8 +46,23 @@ export class ChatService {
             .orderBy(messages.id);
     }
 
-    public insertConversation(title: string) {
-        return this.database.insert(conversations).values({title: title}).returning();
+    public insertConversation(conversation: ConversationInsertRequest) {
+        return this.database.transaction(async (tx) => {
+            let conversationID = await tx.insert(conversations).values({title: conversation.title}).returning();
+
+            if (conversation.chatSettings) {
+                const insertedSettingsMessageID = await tx
+                    .insert(messages)
+                    .values({sender: 'system', content: conversation.chatSettings})
+                    .returning({id: messages.id});
+
+                await tx.insert(conversationMessages)
+                        .values({conversationId: conversationID[0].id,
+                                 messageId: insertedSettingsMessageID[0].id});
+            }
+
+            return conversationID[0].id;
+        });
     }
 
     public async deleteConversation(conversationID: number) {

@@ -9,6 +9,7 @@ export interface Conversation {
 
 export interface ConversationInsertRequest {
     title: string;
+    chatSettings: string;
 }
 
 export class InternalError extends Error {
