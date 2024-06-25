@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Conversation, ConversationInsertRequest, IResponse, InternalError, Message, MessageRequest } from '@ukol-01/common';
 
@@ -36,6 +36,11 @@ export class ChatController {
         return {
             message: response,
         } as IResponse;
+    }
+
+    @Delete(':id')
+    async deleteConversation(@Param('id') id: number) {
+        return await this.chatService.deleteConversation(id);
     }
 
     @Get(':id')

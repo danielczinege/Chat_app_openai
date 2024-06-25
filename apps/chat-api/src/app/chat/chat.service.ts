@@ -4,7 +4,7 @@ import { Message } from '@ukol-01/common';
 import OpenAI from 'openai';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { conversationMessages, messages, conversations } from '../../db/schema';
 
 
@@ -48,6 +48,27 @@ export class ChatService {
 
     public insertConversation(title: string) {
         return this.database.insert(conversations).values({title: title}).returning();
+    }
+
+    public async deleteConversation(conversationID: number) {
+        return this.database.transaction(async (tx) => {
+            const messageIds = await tx
+                .select({ id: messages.id })
+                .from(messages)
+                .innerJoin(conversationMessages, eq(messages.id, conversationMessages.messageId))
+                .where(eq(conversationMessages.conversationId, conversationID));
+
+            if (messageIds.length > 0) {
+                await tx.delete(messages)
+                        .where(inArray(messages.id, messageIds.map(m => m.id)));
+            }
+    
+            await tx.delete(conversationMessages)
+                    .where(eq(conversationMessages.conversationId, conversationID));
+
+            await tx.delete(conversations)
+                    .where(eq(conversations.id, conversationID));
+        });
     }
 
     public async insertMessage(conversationID: number, message: Message) {
