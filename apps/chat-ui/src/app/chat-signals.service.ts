@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit, signal } from '@angular/core';
-import { Conversation, IResponse, Message, MessageRequest } from '@ukol-01/common';
+import { Conversation, ConversationInsertRequest, IResponse, Message, MessageRequest } from '@ukol-01/common';
 import { Observable, catchError, firstValueFrom, of } from 'rxjs';
 
 @Injectable({
@@ -27,5 +27,19 @@ export class ChatSignalsService implements OnInit {
 
     getResponse(message: MessageRequest) {
         return this.http.post<IResponse>("http://localhost:3000/api/chat", message);
+    }
+
+    async createConversation(conversation: ConversationInsertRequest) {
+        let id = await firstValueFrom(this.http.post<number>("http://localhost:3000/api/chat/conversation", conversation));
+        this.conversationID = id;
+        this.conversations.push({id: id,
+                                 title: conversation.title});
+
+        if (conversation.chatSettings) {
+            this.messages.set([{sender: 'system',
+                                content: conversation.chatSettings}]);
+        } else {
+            this.messages.set([]);
+        }
     }
 }

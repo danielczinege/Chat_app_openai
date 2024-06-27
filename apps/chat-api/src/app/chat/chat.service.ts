@@ -4,7 +4,7 @@ import { ConversationInsertRequest, Message } from '@ukol-01/common';
 import OpenAI from 'openai';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
-import { desc, eq, inArray } from 'drizzle-orm';
+import { asc, eq, inArray } from 'drizzle-orm';
 import { conversationMessages, messages, conversations } from '../../db/schema';
 
 
@@ -31,7 +31,7 @@ export class ChatService {
                 id: true,
                 title: true,
             },
-            orderBy: [desc(conversations.id)],
+            orderBy: [asc(conversations.id)],
         });
     }
 
@@ -49,7 +49,7 @@ export class ChatService {
 
     public insertConversation(conversation: ConversationInsertRequest) {
         return this.database.transaction(async (tx) => {
-            let conversationID = await tx.insert(conversations).values({title: conversation.title}).returning();
+            let conversationID = await tx.insert(conversations).values({title: conversation.title}).returning({ id: conversations.id });
 
             if (conversation.chatSettings) {
                 const insertedSettingsMessageID = await tx
@@ -74,13 +74,13 @@ export class ChatService {
                 .innerJoin(conversationMessages, eq(messages.id, conversationMessages.messageId))
                 .where(eq(conversationMessages.conversationId, conversationID));
 
+            await tx.delete(conversationMessages)
+                    .where(eq(conversationMessages.conversationId, conversationID));
+
             if (messageIds.length > 0) {
                 await tx.delete(messages)
                         .where(inArray(messages.id, messageIds.map(m => m.id)));
             }
-    
-            await tx.delete(conversationMessages)
-                    .where(eq(conversationMessages.conversationId, conversationID));
 
             await tx.delete(conversations)
                     .where(eq(conversations.id, conversationID));

@@ -14,20 +14,35 @@ import { SettingsService } from '../../app/settings.service';
 })
 export class ChatListComponent {
     createConversationForm = new FormGroup({
-        conversationsTitle: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
-        customInstructions: new FormControl(null, [Validators.maxLength(2048)]),
+        conversationsTitle: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+        customInstructions: new FormControl('', [Validators.maxLength(2048)]),
     });
-
-    sfjsdlfj = "Philosophical debate";
-    flksjflksdjfklajsdflkjsd = 56;
-
-    nother = "Another debate";
-    smother = 4;
 
     constructor(public chatService: ChatSignalsService,
                 private settings: SettingsService) {}
 
-    handleSubmit() {
+    async createConversation() {
+        let currentTitle = this.createConversationForm.value.conversationsTitle;
+        let currentInstructions = this.createConversationForm.value.customInstructions;
 
+        this.createConversationForm.reset();
+
+        if (!currentTitle) {
+            return;
+        }
+
+        if (currentInstructions == null) {
+            currentInstructions = '';
+        }
+
+        try {
+            this.chatService.createConversation(
+                {title: currentTitle,
+                 chatSettings: currentInstructions}
+            );
+            this.settings.custom_instructions = currentInstructions;
+        } catch(error) {
+            alert("failed to create a new conversation");
+        }
     }
 }

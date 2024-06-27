@@ -14,8 +14,10 @@
               hover:cursor-pointer
               hover:underline-offset-4
               truncate"
-       [ngClass]="{'underline underline-offset-2':chatService.conversationID === this.id}">{{this.title}}</p>
+       [ngClass]="{'underline underline-offset-2':chatService.conversationID === this.id}"
+       (click)="setConversation()">{{this.title}}</p>
     <button type="button"
+            (click)="deleteConversation()"
             class="border-2
                  border-gray-800
                    rounded-2xl
