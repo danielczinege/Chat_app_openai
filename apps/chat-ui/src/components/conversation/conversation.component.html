@@ -1,6 +1,19 @@
-<div [ngClass]="chatService.conversationID === this.id ? 'border-2 border-black bg-teal-900' : 'border-2 border-black bg-teal-600'"
-     class="flex flex-row w-1/2 items-center justify-between mb-1">
-    <p class="text-white h-full hover:text-primary-light flex flex-row items-center flex-1 ml-1 select-none hover:cursor-pointer hover:underline-offset-4"
+<div [ngClass]="chatService.conversationID === this.id
+                ? 'bg-teal-900'
+                : 'bg-teal-600'
+               "
+     class="flex flex-row w-1/2 items-center justify-between border-2 border-black">
+    <p class="text-white h-full
+              hover:text-primary-light
+              flex
+              flex-row
+              items-center
+              flex-1
+              ml-1
+              select-none
+              hover:cursor-pointer
+              hover:underline-offset-4
+              truncate"
        [ngClass]="{'underline underline-offset-2':chatService.conversationID === this.id}">{{this.title}}</p>
     <button type="button"
             class="border-2

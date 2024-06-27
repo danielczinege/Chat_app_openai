@@ -4,7 +4,7 @@ import { ConversationInsertRequest, Message } from '@ukol-01/common';
 import OpenAI from 'openai';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
-import { eq, inArray } from 'drizzle-orm';
+import { desc, eq, inArray } from 'drizzle-orm';
 import { conversationMessages, messages, conversations } from '../../db/schema';
 
 
@@ -26,12 +26,13 @@ export class ChatService {
     }
 
     public getListOfConversations() {
-            return this.database.query.conversations.findMany({
-                columns: {
-                    id: true,
-                    title: true,
-                },
-            });
+        return this.database.query.conversations.findMany({
+            columns: {
+                id: true,
+                title: true,
+            },
+            orderBy: [desc(conversations.id)],
+        });
     }
 
     public getConversation(id: number) {
