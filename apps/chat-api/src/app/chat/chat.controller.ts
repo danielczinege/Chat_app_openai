@@ -38,12 +38,12 @@ export class ChatController {
         } as IResponse;
     }
 
-    @Delete(':id')
+    @Delete('conversations/:id')
     async deleteConversation(@Param('id') id: number) {
         return await this.chatService.deleteConversation(id);
     }
 
-    @Get(':id')
+    @Get('conversations/:id')
     async getConversationMsgs(@Param('id') id: number) {
         const msgs = await this.chatService.getConversation(id).catch((e) => {
             console.error('Error while fetching messages of the conversation: ', e);

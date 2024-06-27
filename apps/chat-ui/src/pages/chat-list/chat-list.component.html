@@ -25,7 +25,7 @@
         @if (chatService.failed_to_load_conversations) {
             <p>Failed to load conversations from database.</p>
         } @else {
-            @for (conversation of chatService.conversations; track conversation.id) {
+            @for (conversation of chatService.conversations(); track conversation.id) {
                 <app-conversation [id]="conversation.id"
                                   [title]="conversation.title"
                                   class="flex flex-row justify-center w-full mb-1"></app-conversation>

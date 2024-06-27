@@ -30,7 +30,7 @@ export class ConversationComponent {
 
         try {
             let loadedMessages = await firstValueFrom<Message[]>(
-                this.http.get<Message[]>("http://localhost:3000/api/chat/" + this.id)
+                this.http.get<Message[]>("http://localhost:3000/api/chat/conversations/" + this.id)
             );
             this.chatService.messages.set(loadedMessages);
             this.chatService.conversationID = this.id;
@@ -52,7 +52,7 @@ export class ConversationComponent {
         this.chatService.processing_response = true;
         try {
             await firstValueFrom<void>(
-                this.http.delete<void>("http://localhost:3000/api/chat/" + this.id)
+                this.http.delete<void>("http://localhost:3000/api/chat/conversations/" + this.id)
             );
 
             if (this.chatService.conversationID === this.id) {
@@ -61,8 +61,7 @@ export class ConversationComponent {
                 this.settings.custom_instructions = '';
             }
 
-            let indexToRemove = this.chatService.conversations.findIndex(elem => elem.id === this.id);
-            this.chatService.conversations.splice(indexToRemove, 1);
+            this.chatService.conversations.update((msgs) => msgs.filter( elem => elem.id != this.id));
             this.chatService.processing_response = false;
         } catch (error) {
             this.chatService.processing_response = false;
