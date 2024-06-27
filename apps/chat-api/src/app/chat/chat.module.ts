@@ -17,5 +17,6 @@ import * as schema from '../../db/schema';
           }),],
     providers: [ChatService],
     controllers: [ChatController],
+    exports: [ChatService],
 })
 export class ChatModule {}
