@@ -42,4 +42,5 @@ Thumbs.db
 .angular
 
 
-apps/chat-api/.env
+**/.env
+**/.env.prod

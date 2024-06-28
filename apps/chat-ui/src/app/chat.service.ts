@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IResponse, Message, MessageRequest } from '@ukol-01/common';
 import { Observable, Subject, catchError, map, of, scan, shareReplay, startWith, switchMap } from 'rxjs';
 import { SettingsService } from './settings.service';
+import { ConfigService } from './config.service';
 
 @Injectable({
     providedIn: 'root'
@@ -33,9 +34,10 @@ export class ChatService {
     );
 
     constructor(private http: HttpClient,
-                private settings: SettingsService) {}
+                private settings: SettingsService,
+                private configService: ConfigService) {}
 
     getResponse(message: MessageRequest) {
-        return this.http.post<IResponse>("http://localhost:3000/api/chat", message);
+        return this.http.post<IResponse>(`${this.configService.config['api_host']}/api/chat`, message);
     }
 }

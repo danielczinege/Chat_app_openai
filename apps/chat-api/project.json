@@ -5,6 +5,11 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {
+      "options": {
+        "generatePackageJson": true
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -25,6 +30,16 @@
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/chat-api/jest.config.ts"
+      }
+    },
+    "dockerize": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "docker build -f ./apps/chat-api/Dockerfile -t api-app ."
+          }
+        ]
       }
     }
   }

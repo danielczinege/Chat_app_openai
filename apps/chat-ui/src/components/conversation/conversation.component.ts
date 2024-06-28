@@ -5,6 +5,7 @@ import { SettingsService } from '../../app/settings.service';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Message } from '@ukol-01/common';
+import { ConfigService } from '../../app/config.service';
 
 @Component({
     selector: 'app-conversation',
@@ -19,7 +20,8 @@ export class ConversationComponent {
 
     constructor(public chatService: ChatSignalsService,
                 private settings: SettingsService,
-                private http: HttpClient) {}
+                private http: HttpClient,
+                private configService: ConfigService) {}
 
     async setConversation() {
         if (this.id === this.chatService.conversationID) {
@@ -30,7 +32,7 @@ export class ConversationComponent {
 
         try {
             let loadedMessages = await firstValueFrom<Message[]>(
-                this.http.get<Message[]>("http://localhost:3000/api/chat/conversations/" + this.id)
+                this.http.get<Message[]>(`${this.configService.config['api_host']}/api/chat/conversations/${this.id}`)
             );
             this.chatService.messages.set(loadedMessages);
             this.chatService.conversationID = this.id;
@@ -52,7 +54,7 @@ export class ConversationComponent {
         this.chatService.processing_response = true;
         try {
             await firstValueFrom<void>(
-                this.http.delete<void>("http://localhost:3000/api/chat/conversations/" + this.id)
+                this.http.delete<void>(`${this.configService.config['api_host']}/api/chat/conversations/${this.id}`)
             );
 
             if (this.chatService.conversationID === this.id) {

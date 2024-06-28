@@ -76,6 +76,16 @@
       "options": {
         "jestConfig": "apps/chat-ui/jest.config.ts"
       }
+    },
+    "dockerize": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "docker build -f ./apps/chat-ui/Dockerfile -t ui-app ."
+          }
+        ]
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit, signal } from '@angular/core';
 import { Conversation, ConversationInsertRequest, IResponse, Message, MessageRequest } from '@ukol-01/common';
 import { Observable, catchError, firstValueFrom, of } from 'rxjs';
+import { ConfigService } from './config.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,13 +14,15 @@ export class ChatSignalsService {
     conversations = signal<Conversation[]>([]);
     failed_to_load_conversations = false;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+                private configService: ConfigService
+    ) {
         this.init();
     }
 
     async init(): Promise<void> {
         const loadedConversations = await firstValueFrom<Conversation[]>(
-            this.http.get<Conversation[]>("http://localhost:3000/api/chat/conversations")
+            this.http.get<Conversation[]>(`${this.configService.config['api_host']}/api/chat/conversations`)
             .pipe(catchError((error: any, caught: Observable<any>) => {
                 this.failed_to_load_conversations = true;
                 return of([] as Conversation[]);
@@ -30,11 +33,11 @@ export class ChatSignalsService {
     }
 
     getResponse(message: MessageRequest) {
-        return this.http.post<IResponse>("http://localhost:3000/api/chat", message);
+        return this.http.post<IResponse>(`${this.configService.config['api_host']}/api/chat`, message);
     }
 
     async createConversation(conversation: ConversationInsertRequest) {
-        let id = await firstValueFrom(this.http.post<number>("http://localhost:3000/api/chat/conversation", conversation));
+        let id = await firstValueFrom(this.http.post<number>(`${this.configService.config['api_host']}/api/chat/conversation`, conversation));
         this.conversationID = id;
 
         this.conversations.update(conversations => [

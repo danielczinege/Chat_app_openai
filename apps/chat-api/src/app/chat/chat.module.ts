@@ -11,7 +11,7 @@ import * as schema from '../../db/schema';
         DrizzlePostgresModule.register({
             tag: 'DB_CONVERSATIONS',
             postgres: {
-              url: 'postgres://postgres:postgres@localhost:5432/postgres',
+              url: process.env['DB_HOST'],
             },
             config: { schema: { ...schema } },
           }),],
